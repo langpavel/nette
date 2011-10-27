@@ -21,7 +21,7 @@ class Service
 	public $args;
 	public $methods;
 
-	static function create(DI\IContainer $container)
+	static function create(DI\IContainer $container = NULL)
 	{
 		$args = func_get_args();
 		unset($args[0]);
@@ -50,11 +50,11 @@ $container->params['tag'] = 'attrs';
 $builder = new DI\ContainerBuilder;
 $builder->addDefinition('one', '%serviceClass%')
 	->setArguments(array('%arg1%', 'b'))
-	->addMethodCall('methodA', array('%arg1%', 'b'));
+	->addCall('methodA', array('%arg1%', 'b'));
 
 $builder->addDefinition('two', NULL)
 	->setFactory('%serviceClass%::create')
-	->setArguments(array('%arg1%', '@one'));
+	->setArguments(array('@container', '%arg1%', '@one'));
 
 $builder->addDefinition('three', NULL)
 	->setFactory(array('%serviceClass%', 'create'));
